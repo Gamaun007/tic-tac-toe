@@ -1,0 +1,15 @@
+@import './variables/index.scss';
+@import './variables/colors.scss';
+
+@font-face {
+    font-family: 'Metropolis';
+    src: url($ASSETS_PATH + '/fonts/Metropolis-Regular') format('truetype');
+}
+
+.metro-font {
+    font-family: "Metropolis";
+}
+
+.font-bold {
+    font-weight: 800 !important;
+}

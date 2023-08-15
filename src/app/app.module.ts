@@ -4,10 +4,18 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from './core/auth/auth.module';
+import { LeftSideComponent } from './layout/components/left-side/left-side.component';
+import { TopHeaderComponent } from './layout/components/top-header/top-header.component';
+import { MainContentComponent } from './layout/components/main-content/main-content.component';
+import { ScoreSidePanelComponent } from './shared-modules/score-table/components/score-side-panel/score-side-panel.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LeftSideComponent,
+    TopHeaderComponent,
+    MainContentComponent,
+    ScoreSidePanelComponent
   ],
   imports: [
     BrowserModule,
