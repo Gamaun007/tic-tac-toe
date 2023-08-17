@@ -9,16 +9,15 @@ const routes: Routes = [
   {
     path: '',
     component: AppComponent,
-    canActivate: [AuthenticationInterceptorService], // Should be replaced with actual auth guard
+    canActivate: [], // Should be replaced with actual auth guard
     children: [
       {
         path: AppRoutes.Game,
         loadChildren: () => import('./modules/playground/playground.module').then((m) => m.PlaygroundModule),
       },
-
       {
         path: '**',
-        component: WildCardComponent,
+        redirectTo: AppRoutes.Game
       },
     ],
   },

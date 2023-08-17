@@ -12,14 +12,14 @@ export class AuthenticationInterceptorService {
   //   return true;
   // }
 
-  async canActivate(_: any, state: RouterStateSnapshot): Promise<boolean> {
-    // startsWith solves the bug with calling wrong authguard
-    if (!(await this.authService.isAuthenticatedAsync())) {
-      this.router.navigate([`/${AppRoutes.Login}`]);
+//   async canActivate(_: any, state: RouterStateSnapshot): Promise<boolean> {
+//     // startsWith solves the bug with calling wrong authguard
+//     if (!(await this.authService.isAuthenticatedAsync())) {
+//       this.router.navigate([`/${AppRoutes.Login}`]);
 
-      return false;
-    }
+//       return false;
+//     }
 
-    return true;
-  }
+//     return true;
+//   }
 }

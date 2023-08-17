@@ -1,0 +1,12 @@
+<button class="btn btn-info-outline" (click)="openModal = true">Sign up</button>
+
+<clr-modal [(clrModalOpen)]="openModal">
+    <h3 class="modal-title">I have a nice title</h3>
+    <div class="modal-body">
+        <p>But not much to say...</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="openModal = false">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="openModal = false">Ok</button>
+    </div>
+</clr-modal>

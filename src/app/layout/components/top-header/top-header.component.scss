@@ -1,0 +1,8 @@
+@import 'index';
+
+:host {
+    display: flex;
+    flex-direction: row;
+    height: 80px;
+    background-color: $light-blue-color;
+}
