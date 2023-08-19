@@ -1,0 +1,9 @@
+<ng-container *ngIf="!(userAuthenticated$ | async); else authorized">
+  <app-sign-up></app-sign-up>
+  <app-sign-in></app-sign-in>
+</ng-container>
+
+<ng-template #authorized>
+  <app-logout-button></app-logout-button>
+  <span class="metro-font font-bold text-light-grey">{{ (userData$ | async)?.name }}</span>
+</ng-template>

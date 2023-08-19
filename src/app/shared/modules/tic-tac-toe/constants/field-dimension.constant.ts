@@ -1,0 +1,1 @@
+export const FieldDimensions = 3;

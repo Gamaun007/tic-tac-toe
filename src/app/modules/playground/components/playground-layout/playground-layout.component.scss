@@ -1,0 +1,15 @@
+@import 'index';
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 100px); /* Adjust size as needed */
+  }
+  
+  .grid-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    border: 1px solid $dark-gray-color;
+    cursor: pointer;
+  }

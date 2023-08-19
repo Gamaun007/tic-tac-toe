@@ -1,1 +1,40 @@
-<p>sign-up works!</p>
+<button class="btn btn-info-outline" (click)="openModal = true">Sign up</button>
+
+<clr-modal [(clrModalOpen)]="openModal">
+    <h3 class="modal-title">I have a nice title</h3>
+    <div class="modal-body">
+        <form clrForm [formGroup]="signUpForm">
+            <clr-input-container>
+              <label>Email</label>
+              <input clrInput type="text" formControlName="email" />
+              <clr-control-helper>Provide your email that will be associated to account</clr-control-helper>
+              <clr-control-error>Field required</clr-control-error>
+            </clr-input-container>
+            <clr-input-container>
+                <label>Name</label>
+                <input clrInput type="text" formControlName="name" />
+                <clr-control-helper>Your display name</clr-control-helper>
+                <clr-control-error>Field required</clr-control-error>
+              </clr-input-container>
+            <clr-password-container>
+                <label>Password</label>
+                <input
+                  clrPassword
+                  autocomplete="current-password"
+                  placeholder="Password"
+                  formControlName="password"
+                  name="password"
+                />
+                <clr-control-helper>
+                  Must contain at least 8 characters
+                </clr-control-helper>
+                <clr-control-error *clrIfError="'required'">This field is required!</clr-control-error>
+                <clr-control-error *clrIfError="'minlength'">It must be at least 8 characters!</clr-control-error>
+              </clr-password-container>
+          </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="openModal = false">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="signUpSubmit(); openModal = false" [disabled]="isFormInvalid">Submit</button>
+    </div>
+</clr-modal>

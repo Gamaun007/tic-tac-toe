@@ -1,12 +1,23 @@
-<button class="btn btn-info-outline" (click)="openModal = true">Sign up</button>
+<button class="btn btn-info-outline" (click)="openModal = true">Log in</button>
 
 <clr-modal [(clrModalOpen)]="openModal">
-    <h3 class="modal-title">I have a nice title</h3>
-    <div class="modal-body">
-        <p>But not much to say...</p>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-outline" (click)="openModal = false">Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="openModal = false">Ok</button>
-    </div>
+  <h3 class="modal-title">Login</h3>
+  <div class="modal-body">
+    <form clrForm [formGroup]="signInForm">
+      <clr-input-container>
+        <label>Email</label>
+        <input clrInput type="text" formControlName="email" placeholder="Email" />
+        <clr-control-error>This field is required!</clr-control-error>
+      </clr-input-container>
+      <clr-password-container>
+        <label>Password</label>
+        <input clrPassword autocomplete="current-password" formControlName="password" name="password"  placeholder="Password" />
+        <clr-control-error *clrIfError="'required'">This field is required!</clr-control-error>
+      </clr-password-container>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="openModal = false">Cancel</button>
+    <button type="button" class="btn btn-primary" [disabled]="isFormInvalid" (click)="login(); openModal = false">Login</button>
+  </div>
 </clr-modal>

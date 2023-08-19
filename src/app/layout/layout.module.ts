@@ -13,9 +13,13 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: PlaygroundLayoutComponent,
+        loadChildren: () => import('../modules/playground/playground.module').then((m) => m.PlaygroundModule),
       },
     ],
+  },
+  {
+    path: '**',
+    redirectTo: AppRoutes.Game,
   },
 ];
 

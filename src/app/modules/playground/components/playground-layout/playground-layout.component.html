@@ -1,1 +1,17 @@
-<p>playground-layout works!</p>
+<ng-container *ngIf="!(sessionInitialized$ | async) || (userLost$ | async); else game">
+  <button type="button" class="btn btn-outline" (click)="start()">Start game session</button>
+</ng-container>
+
+<div *ngIf="(userWinAmount$ | async) as winAmount">
+    <span>Current streak: {{winAmount}}</span>
+</div>
+
+<ng-template #game>
+  <div *ngIf="(roundTableData$ | async) as board" class="grid-container">
+    <ng-container *ngFor="let _ of board; let ind = index">
+      <div class="grid-cell" (click)="cellClicked(ind)">
+        <span *ngIf="board[ind]"> {{ board[ind] }}</span>
+      </div>
+    </ng-container>
+  </div>
+</ng-template>
