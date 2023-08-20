@@ -2,6 +2,7 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameSessionHelperService } from './services/game-session-helper/game-session-helper.service';
 import { AiPlayerService } from './services/ai-bot-player/ai-bot-player.service';
+import { ScoreFacadeService } from './services/score-facade/score-facade.service';
 
 @NgModule({
   imports: [CommonModule],
@@ -10,7 +11,7 @@ export class TicTacToeModule {
   static forRoot(): ModuleWithProviders<TicTacToeModule> {
     return {
       ngModule: TicTacToeModule,
-      providers: [GameSessionHelperService, AiPlayerService],
+      providers: [GameSessionHelperService, AiPlayerService, ScoreFacadeService],
     };
   }
 }

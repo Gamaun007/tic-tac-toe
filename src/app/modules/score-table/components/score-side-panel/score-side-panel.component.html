@@ -1,1 +1,9 @@
-<p>score-side-panel works!</p>
+<ng-container *ngIf="topScores$ | async as scores">
+  <ng-container *ngIf="scores?.length; else noScores">
+    <app-score-item *ngFor="let item of scores; trackBy: trackByItemsRef" [sessionId]="sessionId$ | async" [scoreItem]="item"></app-score-item>
+  </ng-container>
+</ng-container>
+
+<ng-template #noScores>
+  <p>No scores yet :\</p>
+</ng-template>

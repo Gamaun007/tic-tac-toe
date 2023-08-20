@@ -8,23 +8,26 @@ import { EMPTY, Observable, catchError, from, map, of, switchMap, take, throwErr
 export class UserFirebaseWrapperService {
   constructor(private afs: AngularFirestore) {}
 
-  // getAll(): Observable<User[]> {}
-
-  // createUserRecording(uid: firebase.default.auth.UserCredential): Observable<User> {}
-
-  // getUser(uid: string): Observable<User> {}
-
   getSpecificUser(email: string): Observable<User> {
     return this.getUserByQuery(email, (collection) => collection.where('email', '==', email));
   }
 
-  private getUserByQuery(user_identifier: string, query: QueryFn<firebase.default.firestore.DocumentData>): Observable<User> {
+  getSpecificUserByUid(uid: string): Observable<User> {
+    return this.getUsersCollectionReference()
+      .doc(uid)
+      .get()
+      .pipe(map((snap) => snap.data()));
+  }
+
+  private getUserByQuery(
+    user_identifier: string,
+    query: QueryFn<firebase.default.firestore.DocumentData>
+  ): Observable<User> {
     return this.afs
       .collection<User>('users', query)
       .valueChanges()
       .pipe(
         switchMap((users) => {
-          debugger
           if (!users?.length) {
             return throwError(new Error('NO_USERS_ERROR'));
           }
@@ -42,16 +45,14 @@ export class UserFirebaseWrapperService {
   createNewUser(email: string, uid: string, name: string): Observable<User | undefined> {
     return this.getSpecificUser(email).pipe(
       switchMap((_) => {
-        debugger
         return throwError(new Error('USER_ALREADY_EXISTS'));
       }),
       catchError((err) => {
-        debugger
         if (err.message === 'NO_USERS_ERROR') {
           const newUser: User = {
             email: email,
             name: name,
-            uid: uid
+            uid: uid,
           };
 
           return from(this.getUsersCollectionReference().doc(uid).set(newUser)).pipe(

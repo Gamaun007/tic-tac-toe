@@ -1,0 +1,15 @@
+@import 'index';
+
+:host {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+
+    .current-session {
+        color: $dark-blue-color !important;
+    }
+
+    .name {
+        color: $grey-color;
+    }
+}

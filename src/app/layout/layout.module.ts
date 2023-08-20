@@ -6,6 +6,7 @@ import { LoginModule } from '../modules/login/login.module';
 import { RouterModule, Routes } from '@angular/router';
 import { PlaygroundLayoutComponent } from '../modules/playground/components';
 import { AppRoutes } from '../constants/routes.constant';
+import { ScoreTableModule } from '../modules/score-table/score-table.module';
 
 const routes: Routes = [
   {
@@ -26,6 +27,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [LeftSideComponent, TopHeaderComponent, MainContentComponent],
   exports: [LeftSideComponent, TopHeaderComponent, MainContentComponent],
-  imports: [RouterModule, CommonModule, ClarityModule, LoginModule, RouterModule.forChild(routes)],
+  imports: [RouterModule, CommonModule, ClarityModule, LoginModule, RouterModule.forChild(routes), ScoreTableModule],
 })
 export class LayoutModule {}

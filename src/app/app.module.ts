@@ -11,6 +11,7 @@ import { LoginModule } from './modules/login/login.module';
 import { LayoutModule } from './layout/layout.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { TicTacToeModule } from './shared/modules/tic-tac-toe/tic-tac-toe.modules';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
     AngularFireModule.initializeApp(configWrapper.config.firebase),
     AngularFireDatabaseModule,
     AuthModule.forRoot(),
+    TicTacToeModule.forRoot(),
     AppRoutingModule,
     ClarityModule,
     LoginModule

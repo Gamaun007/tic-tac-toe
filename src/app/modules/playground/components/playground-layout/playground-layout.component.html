@@ -1,17 +1,28 @@
-<ng-container *ngIf="!(sessionInitialized$ | async) || (userLost$ | async); else game">
-  <button type="button" class="btn btn-outline" (click)="start()">Start game session</button>
+<ng-container *ngIf="!(sessionInitialized$ | async); else game">
+  <ng-container *ngTemplateOutlet="startSessionButton"></ng-container>
 </ng-container>
 
-<div *ngIf="(userWinAmount$ | async) as winAmount">
-    <span>Current streak: {{winAmount}}</span>
+<ng-container *ngIf="userLost$ | async">
+  <ng-container *ngIf="!currentUser">
+    <span>In order to save your score you have to login to system!</span>
+  </ng-container>
+  <ng-container *ngTemplateOutlet="startSessionButton"></ng-container>
+</ng-container>
+
+<div *ngIf="userWinAmount$ | async as winAmount">
+  <span>Current streak: {{ winAmount }}</span>
 </div>
 
 <ng-template #game>
-  <div *ngIf="(roundTableData$ | async) as board" class="grid-container">
+  <div *ngIf="roundTableData$ | async as board" class="grid-container">
     <ng-container *ngFor="let _ of board; let ind = index">
-      <div class="grid-cell" (click)="cellClicked(ind)">
+      <div class="grid-cell" [class.disabled]="userLost$ | async" (click)="cellClicked(ind)">
         <span *ngIf="board[ind]"> {{ board[ind] }}</span>
       </div>
     </ng-container>
   </div>
+</ng-template>
+
+<ng-template #startSessionButton>
+  <button type="button" class="btn btn-primary start-session" (click)="start()">Start new game session</button>
 </ng-template>

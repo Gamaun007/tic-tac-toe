@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Player, Round, SessionData, TurnRecord } from '../../models/game-session.models';
 import { FieldDimensions } from '../../constants/field-dimension.constant';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class GameSessionHelperService {
@@ -26,11 +27,14 @@ export class GameSessionHelperService {
   }
 
   startSession(userTurnFirst: boolean): void {
+    this.finishSession();
     const nextRoundOfCurrentSession = this.createNextSessionRoundObject();
+    console.log('nextRoundOfCurrentSession', nextRoundOfCurrentSession);
 
     this.currentSessionRound$.next(nextRoundOfCurrentSession);
     this.currentSession$.next({
       rounds: { [nextRoundOfCurrentSession.id]: nextRoundOfCurrentSession },
+      session_id: uuidv4(),
       userTurnFirst,
     });
   }
@@ -46,13 +50,13 @@ export class GameSessionHelperService {
     });
   }
 
-  takeTurn(cellIndex: number, player: Player): void | 'continue' {
+  takeTurn(cellIndex: number, player: Player): void | 'continue' | false {
     // Update round table cache;
+    if (this.roundBoardState$.value[cellIndex]) return false;
     this.roundBoardState$.value[cellIndex] = player;
 
     const updatedTurns = [...this.currentSessionRound$.value.turns, { cellIndex, by: player }];
     const roundResult = this.checkRoundStatus(updatedTurns, player);
-    debugger;
     if (roundResult === 'continue') {
       this.currentSessionRound$.next({
         ...this.currentSessionRound$.value,
@@ -83,11 +87,14 @@ export class GameSessionHelperService {
         },
       });
 
-      this.nextRound();
+      if ((roundResult === 'win' && player == Player.USER) || roundResult === 'even') {
+        this.nextRound();
+      }
     }
   }
 
   finishSession(): void {
+    this.initRoundBoardState();
     this.currentSession$.next(null);
     this.currentSessionRound$.next(null);
   }
@@ -129,7 +136,6 @@ export class GameSessionHelperService {
 
   private checkForWin(playerTurn: Player): boolean {
     // Row
-    debugger;
     let rowCellsForPlayer = 0;
 
     for (let rowIndex = 0; rowIndex < FieldDimensions; rowIndex++) {
@@ -190,7 +196,10 @@ export class GameSessionHelperService {
     let secondDiagonalCellsForPlayer = 0;
 
     for (let colAndRowIndex = 0; colAndRowIndex < FieldDimensions; colAndRowIndex++) {
-      if (this.roundBoardState$.value[this.getCellIndex(colAndRowIndex, (FieldDimensions -1 - colAndRowIndex))] !== playerTurn) {
+      if (
+        this.roundBoardState$.value[this.getCellIndex(colAndRowIndex, FieldDimensions - 1 - colAndRowIndex)] !==
+        playerTurn
+      ) {
         break;
       } else {
         ++secondDiagonalCellsForPlayer;

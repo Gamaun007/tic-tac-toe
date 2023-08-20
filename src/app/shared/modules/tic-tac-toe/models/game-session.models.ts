@@ -1,5 +1,6 @@
 export interface SessionData {
   userTurnFirst: boolean;
+  session_id: string;
   rounds: { [id: number]: Round };
 }
 

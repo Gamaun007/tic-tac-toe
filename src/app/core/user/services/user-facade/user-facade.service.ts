@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, filter, switchMap } from 'rxjs';
+import { EMPTY, Observable, filter, of, switchMap } from 'rxjs';
 import { AuthenticationService } from 'src/app/core/auth/services';
 import { User } from 'src/app/data/models';
 import { UserFirebaseWrapperService } from '../user-firebase-wrapper/user-firebase-wrapper.service';
@@ -10,8 +10,16 @@ export class UserFacadeService {
 
   getCurrentUser(): Observable<User> {
     return this.auth.isAuthenticated().pipe(
-      filter(Boolean),
-      switchMap((creds) => this.userFirebaseWrapper.getSpecificUser(creds?.email as string))
+      switchMap((creds) => {
+        if (creds) {
+          return this.userFirebaseWrapper.getSpecificUser(creds?.email as string);
+        }
+        return of(undefined);
+      })
     );
+  }
+
+  getUserByUid(uid: string): Observable<User> {
+    return this.userFirebaseWrapper.getSpecificUserByUid(uid);
   }
 }
