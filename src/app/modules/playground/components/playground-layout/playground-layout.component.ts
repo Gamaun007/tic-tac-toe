@@ -2,7 +2,6 @@ import { UserFacadeService } from 'src/app/core/user/services';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   Observable,
-  Subject,
   distinctUntilChanged,
   filter,
   map,
@@ -51,9 +50,7 @@ export class PlaygroundLayoutComponent implements OnInit, OnDestroy {
       distinctUntilChanged()
     );
 
-    this.userWinAmount$ = sessionRounds.pipe(
-      map((rounds) => Object.values(rounds).filter((round) => round.winner === Player.USER).length)
-    );
+    this.userWinAmount$ = this.gameSessionHelperService.getCurrentSessionUserWins();
 
     const sub1 = this.userFacadeService.getCurrentUser().subscribe((user) => (this.currentUser = user));
 
@@ -67,6 +64,7 @@ export class PlaygroundLayoutComponent implements OnInit, OnDestroy {
       });
 
     this.saveScoreOnUserLoggedIn();
+    this.closeSessionOnLogout();
 
     this.subscriptions.push(sub1, sub2);
     this.roundTableData$ = this.gameSessionHelperService.RoundBoardState;
@@ -107,17 +105,21 @@ export class PlaygroundLayoutComponent implements OnInit, OnDestroy {
     this.gameSessionHelperService.finishSession();
   }
 
-  saveScoreOnUserLoggedIn(): void {
-    combineLatest([this.authService.onSignIn$, this.authService.onSignOut$])
-      .pipe(
-        switchMap((v) => {
-          console.log('switchMap', v);
-          return this.userFacadeService.getCurrentUser().pipe(filter(Boolean), distinctUntilChanged(), take(1));
+  private closeSessionOnLogout(): void {
+    this.subscriptions.push(this.authService.onSignOut$.subscribe(() => this.finish()));
+  }
+
+  private saveScoreOnUserLoggedIn(): void {
+    this.subscriptions.push(
+      combineLatest([this.authService.onSignIn$, this.authService.onSignOut$])
+        .pipe(
+          switchMap((v) => {
+            return this.userFacadeService.getCurrentUser().pipe(filter(Boolean), distinctUntilChanged(), take(1));
+          })
+        )
+        .subscribe(() => {
+          this.saveCurrentUserScore();
         })
-      )
-      .subscribe(() => {
-        console.log('save');
-        this.saveCurrentUserScore();
-      });
+    );
   }
 }

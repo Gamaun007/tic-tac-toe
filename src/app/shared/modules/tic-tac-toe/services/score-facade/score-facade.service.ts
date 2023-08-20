@@ -61,7 +61,6 @@ export class ScoreFacadeService {
           );
         }),
         catchError((err) => {
-          console.log('Errors ?', err);
           return EMPTY;
         })
       )

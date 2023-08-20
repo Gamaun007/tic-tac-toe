@@ -1,6 +1,5 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { distinctUntilChanged, map, Observable, tap } from 'rxjs';
 import { AuthenticationService } from 'src/app/core/auth/services';
 
 @Component({
@@ -23,8 +22,8 @@ export class SignUpComponent {
 
   constructor(private auth: AuthenticationService) {}
 
-  signUpSubmit(): void {
+  async signUpSubmit(): Promise<void> {
     const controls = this.signUpForm.controls;
-    this.auth.signUpWithEmail(controls.email.value, controls.name.value, controls.password.value);
+    await this.auth.signUpWithEmail(controls.email.value, controls.name.value, controls.password.value);
   }
 }

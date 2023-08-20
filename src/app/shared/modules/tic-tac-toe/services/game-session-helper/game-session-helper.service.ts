@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, distinctUntilChanged, filter, map } from 'rxjs';
 import { Player, Round, SessionData, TurnRecord } from '../../models/game-session.models';
 import { FieldDimensions } from '../../constants/field-dimension.constant';
 import { v4 as uuidv4 } from 'uuid';
@@ -26,10 +26,19 @@ export class GameSessionHelperService {
     this.initRoundBoardState();
   }
 
+  getCurrentSessionUserWins(): Observable<number> {
+    return this.Session.pipe(
+      filter(Boolean),
+      map((session) => session.rounds),
+      distinctUntilChanged(),
+      map((rounds) => Object.values(rounds).filter((round) => round.winner === Player.USER).length)
+
+    );
+  }
+
   startSession(userTurnFirst: boolean): void {
     this.finishSession();
     const nextRoundOfCurrentSession = this.createNextSessionRoundObject();
-    console.log('nextRoundOfCurrentSession', nextRoundOfCurrentSession);
 
     this.currentSessionRound$.next(nextRoundOfCurrentSession);
     this.currentSession$.next({

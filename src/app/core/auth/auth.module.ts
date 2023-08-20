@@ -6,7 +6,7 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { UserModule } from '../user/user.module';
 
 @NgModule({
-  imports: [CommonModule, AuthRoutingModule, UserModule],
+  imports: [CommonModule, AuthRoutingModule, UserModule.forRoot()],
 })
 export class AuthModule {
   static forRoot(): ModuleWithProviders<AuthModule> {

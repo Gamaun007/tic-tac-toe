@@ -1,4 +1,4 @@
-<ng-container *ngIf="topScores$ | async as scores">
+<ng-container *ngIf="(scoresToDisplay$ | async) as scores">
   <ng-container *ngIf="scores?.length; else noScores">
     <app-score-item *ngFor="let item of scores; trackBy: trackByItemsRef" [sessionId]="sessionId$ | async" [scoreItem]="item"></app-score-item>
   </ng-container>

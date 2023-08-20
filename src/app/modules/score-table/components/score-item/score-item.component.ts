@@ -17,7 +17,7 @@ export class ScoreItemComponent implements OnChanges, OnInit {
   scoreItem: Score;
 
   displayName$: Observable<string>;
-  isCurrentUserScore$: Observable<boolean>;
+  isCurrentUserOrGuestScore$: Observable<boolean>;
   isCurrentSessionScore$ = new BehaviorSubject<boolean>(undefined);
   scoreItemChanges$ = new BehaviorSubject<Score>(undefined);
   nameHighlight$: Observable<boolean>;
@@ -25,28 +25,24 @@ export class ScoreItemComponent implements OnChanges, OnInit {
   constructor(private userFacade: UserFacadeService) {}
 
   ngOnInit(): void {
-    this.isCurrentUserScore$ = combineLatest([this.scoreItemChanges$, this.userFacade.getCurrentUser()]).pipe(
+    this.isCurrentUserOrGuestScore$ = combineLatest([this.scoreItemChanges$, this.userFacade.getCurrentUser()]).pipe(
       map(([item, user]) => item.uid === user?.uid)
     );
 
-    const combined = combineLatest([this.isCurrentUserScore$, this.isCurrentSessionScore$]).pipe(
+    const combined = combineLatest([this.isCurrentUserOrGuestScore$, this.isCurrentSessionScore$]).pipe(
       distinctUntilChanged()
     );
 
     this.nameHighlight$ = combined.pipe(
-      map(([isCurrentUserScore, isCurrentSessionScore]) => {
-        return (
-          (isCurrentUserScore && isCurrentSessionScore) ||
-        // Means it is the score of current 'guest'
-          (!this.scoreItem?.uid && !isCurrentUserScore && isCurrentSessionScore)
-        );
+      map(([isCurrentUserOrGuestScore, isCurrentSessionScore]) => {
+        return isCurrentUserOrGuestScore && isCurrentSessionScore;
       })
     );
 
     this.displayName$ = combined.pipe(
       switchMap(([isCurrentUserScore, isCurrentSessionScore]) => {
         // Means it is the score of current 'guest'
-        if (!this.scoreItem?.uid && !isCurrentUserScore && isCurrentSessionScore) {
+        if (!this.scoreItem?.uid && isCurrentUserScore && isCurrentSessionScore) {
           return of('Your score');
         }
 
@@ -58,7 +54,7 @@ export class ScoreItemComponent implements OnChanges, OnInit {
   async ngOnChanges(changes: SimpleChanges): Promise<void> {
     if ('scoreItem' in changes) {
       if (changes['scoreItem'].firstChange) {
-        this.isCurrentUserScore$ = this.userFacade
+        this.isCurrentUserOrGuestScore$ = this.userFacade
           .getCurrentUser()
           .pipe(map((user) => user?.uid === this.scoreItem.uid));
       }
