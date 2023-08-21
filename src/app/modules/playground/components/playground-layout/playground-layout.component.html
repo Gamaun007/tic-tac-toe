@@ -2,7 +2,7 @@
   <ng-container *ngTemplateOutlet="startSessionButton"></ng-container>
 </ng-container>
 
-<ng-container *ngIf="userLost$ | async">
+<ng-container *ngIf="(userLost$ | async) && (sessionInitialized$ | async)">
   <p> You have lost :C</p>
   <ng-container *ngIf="!currentUser">
     <span>In order to save your score you have to login to system!</span>
