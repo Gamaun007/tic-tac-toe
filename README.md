@@ -25,7 +25,9 @@ Fill it with my server data `{
     }
 }`
 
-2. Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+2. run `npm i` to install all packages
+
+3. Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
 ## Running unit tests
 
