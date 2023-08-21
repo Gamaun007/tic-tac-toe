@@ -3,22 +3,21 @@
 </ng-container>
 
 <ng-container *ngIf="userLost$ | async">
+  <p> You have lost :C</p>
   <ng-container *ngIf="!currentUser">
     <span>In order to save your score you have to login to system!</span>
   </ng-container>
   <ng-container *ngTemplateOutlet="startSessionButton"></ng-container>
 </ng-container>
 
-<div *ngIf="userWinAmount$ | async as winAmount">
-  <span>Current streak: {{ winAmount }}</span>
-</div>
-
 <ng-template #game>
   <div *ngIf="roundTableData$ | async as board" class="grid-container">
-    <ng-container *ngFor="let _ of board; let ind = index">
-      <div class="grid-cell" [class.disabled]="userLost$ | async" (click)="cellClicked(ind)">
-        <span *ngIf="board[ind]"> {{ board[ind] }}</span>
-      </div>
+    <ng-container *ngIf="viewMarks$ | async as marks">
+      <ng-container *ngFor="let userMark of board; let ind = index">
+        <div class="grid-cell" [class.disabled]="userLost$ | async" (click)="cellClicked(ind)">
+          <span *ngIf="board[ind]" class="mark"> {{ marks[userMark] }}</span>
+        </div>
+      </ng-container>
     </ng-container>
   </div>
 </ng-template>

@@ -26,12 +26,18 @@ import { AuthenticationService } from 'src/app/core/auth/services';
 })
 export class PlaygroundLayoutComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
+  private readonly viewMarks = {
+    ['true']: 'X',
+    ['false']: 'O',
+  };
 
+  userGoFirst = true;
   currentUser: User;
   sessionInitialized$: Observable<boolean>;
   roundTableData$: Observable<(Player | null)[]>;
   userWinAmount$: Observable<number>;
   userLost$ = new BehaviorSubject<any>(undefined);
+  viewMarks$: Observable<{ [key in Player]: 'X' | 'O' }>;
 
   constructor(
     private gameSessionHelperService: GameSessionHelperService,
@@ -48,6 +54,16 @@ export class PlaygroundLayoutComponent implements OnInit, OnDestroy {
       filter(Boolean),
       map((session) => session.rounds),
       distinctUntilChanged()
+    );
+
+    this.viewMarks$ = this.gameSessionHelperService.Session.pipe(
+      map((session) => session.userTurnFirst),
+      map((isUserTurnsFirst) => {
+        return {
+          [Player.USER]: this.viewMarks[isUserTurnsFirst.toString()],
+          [Player.AI]: this.viewMarks[(!isUserTurnsFirst).toString()],
+        };
+      })
     );
 
     this.userWinAmount$ = this.gameSessionHelperService.getCurrentSessionUserWins();
@@ -98,7 +114,7 @@ export class PlaygroundLayoutComponent implements OnInit, OnDestroy {
 
   start(): void {
     this.userLost$.next(false);
-    this.gameSessionHelperService.startSession(true);
+    this.gameSessionHelperService.startSession(this.userGoFirst);
   }
 
   finish(): void {
