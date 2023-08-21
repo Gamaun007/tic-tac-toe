@@ -12,7 +12,20 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+1. Add a file `env.config` into `assets` folder
+Fill it with my server data `{
+    "firebase": {
+        "apiKey": "AIzaSyDyAiBJJhU1eb-LtkVEngDYYfEOE5cxK3s",
+        "authDomain": "tictactoe-38ae3.firebaseapp.com",
+        "projectId": "tictactoe-38ae3",
+        "databaseURL": "https://tictactoe-38ae3-default-rtdb.europe-west1.firebasedatabase.app/",
+        "storageBucket": "tictactoe-38ae3.appspot.com",
+        "messagingSenderId": "1055484464407",
+        "appId": "1:1055484464407:web:ecdc5bfda6436ab128fb52"
+    }
+}`
+
+2. Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
 ## Running unit tests
 
