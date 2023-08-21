@@ -12,7 +12,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
-1. Add a file `env.config` into `assets` folder
+1. Add a file `env.config.json` into `assets` folder
 Fill it with my server data `{
     "firebase": {
         "apiKey": "AIzaSyDyAiBJJhU1eb-LtkVEngDYYfEOE5cxK3s",
